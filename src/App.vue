@@ -1,7 +1,7 @@
 <template>
   <div>
-    <header-page />
-    <main-page :arr-albums="Albums" />
+    <header-page @changeGenre="searchGenre" />
+    <main-page :arr-albums="arrSelectedGenre" />
   </div>
 </template>
 
@@ -19,8 +19,14 @@ export default {
   data() {
     return {
       urlApi: 'https://flynn.boolean.careers/exercises/api/array/music',
-      Albums: null,
+      Albums: [],
+      genreTwo: 'All',
     };
+  },
+  computed: {
+    arrSelectedGenre() {
+      return this.Albums.filter((objAlbum) => objAlbum.genre === this.genreTwo);
+    },
   },
   created() {
     axios.get(this.urlApi)
@@ -28,6 +34,11 @@ export default {
         console.log(axiosResponse);
         this.Albums = axiosResponse.data.response;
       });
+  },
+  methods: {
+    searchGenre(genre) {
+      this.genreTwo = genre;
+    },
   },
 };
 
